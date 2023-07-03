@@ -15,7 +15,7 @@
                 Padding="5"
                 RowSpacing="1"
                 ColumnSpacing="1"
-                BackgroundColor="NavajoWhite">
+                BackgroundColor="WhiteSmoke">
 
                 <Grid.RowDefinitions>
                     <RowDefinition Height="Auto" />

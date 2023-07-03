@@ -48,7 +48,7 @@
                             <Label Text="{Binding StartDate, StringFormat='{0:M/dd/yyyy}'}" FontSize="Medium" Grid.Row="1" Grid.Column="1" VerticalTextAlignment="Center" />
 
                             <Label Grid.Row="2" Grid.Column="0" FontSize="Medium" VerticalTextAlignment="Center" FontAttributes="Bold">End Date</Label>
-                            <Label Text="{Binding StartDate, StringFormat='{0:M/dd/yyyy}'}" FontSize="Medium" Grid.Row="3" Grid.Column="1" VerticalTextAlignment="Center" />
+                            <Label Text="{Binding EndDate, StringFormat='{0:M/dd/yyyy}'}" FontSize="Medium" Grid.Row="2" Grid.Column="1" VerticalTextAlignment="Center" />
                         </Grid>
                     </StackLayout>
                 </DataTemplate>

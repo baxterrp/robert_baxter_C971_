@@ -16,7 +16,7 @@
                 Padding="5"
                 RowSpacing="1"
                 ColumnSpacing="1"
-                BackgroundColor="NavajoWhite">
+                BackgroundColor="WhiteSmoke">
 
                 <Grid.RowDefinitions>
                     <RowDefinition Height="Auto" />
@@ -64,6 +64,8 @@
                     VerticalTextAlignment="Center"
                     Text="{Binding Notes}"></Entry>
             </Grid>
+            <Button x:Name="AddAssessment" Text="Add Assessment" Clicked="AddAssessment_Clicked"></Button>
+
         </StackLayout>
     </ContentPage.Content>
 </ContentPage>

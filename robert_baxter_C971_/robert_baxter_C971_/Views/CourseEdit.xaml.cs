@@ -76,5 +76,10 @@ namespace robert_baxter_C971_.Views
                 await DisplayAlert("Canceled", "No course deleted", "Ok");
             }
         }
+
+        private async void AddAssessment_Clicked(object sender, EventArgs e)
+        {
+            await Navigation.PushAsync(new AssessmentAdd(_selectedCourse));
+        }
     }
 }
