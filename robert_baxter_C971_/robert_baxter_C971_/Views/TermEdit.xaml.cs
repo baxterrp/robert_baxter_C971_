@@ -26,6 +26,13 @@ namespace robert_baxter_C971_.Views
             EndDatePicker.Date = term.EndDate;
         }
 
+        protected override async void OnAppearing()
+        {
+            base.OnAppearing();
+
+            CourseCollectionView.ItemsSource = await DatabaseService.GetCoursesByTerm(_selectedTerm);
+        }
+
         private async void SaveTerm_Clicked(object sender, EventArgs e)
         {
             if (string.IsNullOrWhiteSpace(TermTitle.Text))
@@ -60,6 +67,17 @@ namespace robert_baxter_C971_.Views
             {
                 await DisplayAlert("Canceled", "Term not deleted", "Ok");
             }
+        }
+
+        private async void AddCourse_Clicked(object sender, EventArgs e)
+        {
+            await Navigation.PushAsync(new CourseAdd(_selectedTerm));
+        }
+
+        private async void CourseCollectionView_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        {
+            var selectedCourse = CourseCollectionView.SelectedItem as Course;
+            await Navigation.PushAsync(new CourseEdit(selectedCourse));
         }
     }
 }

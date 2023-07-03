@@ -4,6 +4,7 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.IO;
+using System.Linq;
 using System.Threading.Tasks;
 using Xamarin.Essentials;
 
@@ -15,12 +16,12 @@ namespace robert_baxter_C971_.Services
 
         public static async Task Initialize()
         {
-            if(_dbConnection != null)
+            if (_dbConnection != null)
             {
                 return;
             }
 
-            _dbConnection = 
+            _dbConnection =
                 new SQLiteAsyncConnection(Path.Combine(FileSystem.AppDataDirectory, "wgu_db.db"));
 
             await _dbConnection.CreateTableAsync<Term>();
@@ -163,6 +164,24 @@ namespace robert_baxter_C971_.Services
         internal static async Task DeleteTerm(Term term)
         {
             await Initialize();
+
+            var courses = await _dbConnection.Table<Course>().Where(course => course.TermId == term.Id).ToListAsync();
+            var courseIds = courses.Select(course => course.Id).ToArray();
+            var assessments =
+                await _dbConnection.Table<Assessment>()
+                    .Where(assessment => courseIds.Contains(assessment.CourseId))
+                    .ToListAsync();
+
+            foreach (var assessment in assessments)
+            {
+                await _dbConnection.DeleteAsync(assessment);
+            }
+
+            foreach (var course in courses)
+            {
+                await _dbConnection.DeleteAsync(course);
+            }
+
             await _dbConnection.DeleteAsync(term);
         }
 
@@ -170,6 +189,36 @@ namespace robert_baxter_C971_.Services
         {
             await Initialize();
             await _dbConnection.UpdateAsync(selectedTerm);
+        }
+
+        internal static async Task SaveNewCourse(Course course)
+        {
+            await Initialize();
+            await _dbConnection.InsertAsync(course);
+        }
+
+        internal static async Task<IEnumerable> GetCoursesByTerm(Term selectedTerm)
+        {
+            await Initialize();
+            return await _dbConnection.Table<Course>().Where(course => course.TermId == selectedTerm.Id).ToListAsync();
+        }
+
+        internal static async Task UpdateCourse(Course course)
+        {
+            await Initialize();
+            await _dbConnection.UpdateAsync(course);
+        }
+
+        internal static async Task<IEnumerable<Course>> GetAllCourses()
+        {
+            await Initialize();
+            return await _dbConnection.Table<Course>().ToListAsync();
+        }
+
+        internal static async Task DeleteCourse(Course selectedCourse)
+        {
+            await Initialize();
+            await _dbConnection.DeleteAsync(selectedCourse);
         }
     }
 }

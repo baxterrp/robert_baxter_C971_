@@ -6,8 +6,8 @@
         <Label Text="Add New Term" FontSize="Medium"></Label>
     </NavigationPage.TitleView>
     <ContentPage.ToolbarItems>
-        <ToolbarItem x:Name="SaveNewTerm" Text="Save" Clicked="SaveNewTerm_Clicked"></ToolbarItem>
-        <ToolbarItem x:Name="CancelCreateNewTerm" Text="Cancel" Clicked="CancelCreateNewTerm_Clicked"></ToolbarItem>
+        <ToolbarItem Text="Save" Clicked="SaveNewTerm_Clicked"></ToolbarItem>
+        <ToolbarItem Text="Cancel" Clicked="CancelCreateNewTerm_Clicked"></ToolbarItem>
     </ContentPage.ToolbarItems>
     <ContentPage.Content>
         <StackLayout>

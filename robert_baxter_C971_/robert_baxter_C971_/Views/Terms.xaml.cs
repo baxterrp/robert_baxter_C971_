@@ -5,6 +5,7 @@ using System.Linq;
 using System;
 using Xamarin.Forms;
 using Xamarin.Forms.Xaml;
+using System.Threading.Tasks;
 
 namespace robert_baxter_C971_.Views
 {
@@ -21,6 +22,43 @@ namespace robert_baxter_C971_.Views
         protected override async void OnAppearing()
         {
             base.OnAppearing();
+            await InitializeTerms();
+            await InitializeCourses();
+            await InitializeAssessments();
+        }
+
+        private async Task InitializeAssessments()
+        {
+            //TODO: notifications for assessments
+        }
+
+        private async Task InitializeCourses()
+        {
+            var courses = await DatabaseService.GetAllCourses();
+            var notificationId = 0;
+
+            foreach (var term in courses.Where(w => DateTime.Today.Equals(w.StartDate) || DateTime.Today.Equals(w.EndDate)).ToList())
+            {
+                try
+                {
+                    if (DateTime.Today.Equals(term.StartDate))
+                    {
+                        CrossLocalNotifications.Current.Show("Notice", $"{term.Name} begins today!", notificationId++);
+                    }
+                    else
+                    {
+                        CrossLocalNotifications.Current.Show("Notice", $"{term.Name} ends today!", notificationId++);
+                    }
+                }
+                catch (Exception exception)
+                {
+                    await DisplayAlert("Whoops", $"Something happened while showing notification for term {term.Name}! {exception.Message}", "Ok");
+                }
+            }
+        }
+
+        private async Task InitializeTerms()
+        {
             var terms = await DatabaseService.GetAllTerms();
             TermsView.ItemsSource = terms;
 
@@ -43,7 +81,6 @@ namespace robert_baxter_C971_.Views
                 {
                     await DisplayAlert("Whoops", $"Something happened while showing notification for term {term.Title}! {exception.Message}", "Ok");
                 }
-
             }
         }
 
