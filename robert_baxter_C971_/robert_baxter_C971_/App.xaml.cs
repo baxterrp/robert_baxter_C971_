@@ -9,7 +9,7 @@ namespace robert_baxter_C971_
         {
             InitializeComponent();
 
-            var dashboard = new Dashboard();
+            var dashboard = new Terms();
             var nav = new NavigationPage(dashboard);
 
             MainPage = nav;

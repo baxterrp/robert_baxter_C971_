@@ -45,10 +45,5 @@ namespace robert_baxter_C971_.Views
         {
             await Navigation.PushAsync(new GadgetList());
         }
-
-        private async void Settings_Clicked(object sender, System.EventArgs e)
-        {
-            await Navigation.PushAsync(new AppSettings());
-        }
     }
 }

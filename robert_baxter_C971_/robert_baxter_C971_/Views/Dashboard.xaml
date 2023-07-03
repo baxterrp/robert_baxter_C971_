@@ -8,7 +8,6 @@
     <ContentPage.ToolbarItems>
         <ToolbarItem Text="Add Gadget" Clicked="AddGadget_Clicked"></ToolbarItem>
         <ToolbarItem Text="View Gadgets" Clicked="ViewGadgets_Clicked"></ToolbarItem>
-        <ToolbarItem Text="Settings" Order="Secondary" Clicked="Settings_Clicked"></ToolbarItem>
     </ContentPage.ToolbarItems>
     <ContentPage.Content>
         <StackLayout>

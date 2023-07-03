@@ -1,6 +1,7 @@
 ﻿using robert_baxter_C971_.Models;
 using SQLite;
 using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.IO;
 using System.Threading.Tasks;
@@ -19,9 +20,15 @@ namespace robert_baxter_C971_.Services
                 return;
             }
 
-            var path = Path.Combine(FileSystem.AppDataDirectory, "Gadgets.db");
-            _dbConnection = new SQLiteAsyncConnection(path);
+            _dbConnection = 
+                new SQLiteAsyncConnection(Path.Combine(FileSystem.AppDataDirectory, "wgu_db.db"));
 
+            await _dbConnection.CreateTableAsync<Term>();
+            await _dbConnection.CreateTableAsync<Instructor>();
+            await _dbConnection.CreateTableAsync<Course>();
+            await _dbConnection.CreateTableAsync<Assessment>();
+
+            // cleanup
             await _dbConnection.CreateTableAsync<Gadget>();
             await _dbConnection.CreateTableAsync<Widget>();
         }
@@ -139,6 +146,30 @@ namespace robert_baxter_C971_.Services
 
                 await _dbConnection.UpdateAsync(widget);
             }
+        }
+
+        public static async Task SaveNewTerm(Term newTerm)
+        {
+            await Initialize();
+            await _dbConnection.InsertAsync(newTerm);
+        }
+
+        public static async Task<IEnumerable<Term>> GetAllTerms()
+        {
+            await Initialize();
+            return await _dbConnection.Table<Term>().ToListAsync();
+        }
+
+        internal static async Task DeleteTerm(Term term)
+        {
+            await Initialize();
+            await _dbConnection.DeleteAsync(term);
+        }
+
+        internal static async Task UpdateTerm(Term selectedTerm)
+        {
+            await Initialize();
+            await _dbConnection.UpdateAsync(selectedTerm);
         }
     }
 }
