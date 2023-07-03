@@ -29,7 +29,27 @@ namespace robert_baxter_C971_.Views
 
         private async Task InitializeAssessments()
         {
-            //TODO: notifications for assessments
+            var assessments = await DatabaseService.GetAllAssessments();
+            var notificationId = 0;
+
+            foreach (var assessment in assessments.Where(w => DateTime.Today.Equals(w.StartDate) || DateTime.Today.Equals(w.EndDate)).ToList())
+            {
+                try
+                {
+                    if (DateTime.Today.Equals(assessment.StartDate))
+                    {
+                        CrossLocalNotifications.Current.Show("Notice", $"{assessment.Name} begins today!", notificationId++);
+                    }
+                    else
+                    {
+                        CrossLocalNotifications.Current.Show("Notice", $"{assessment.Name} ends today!", notificationId++);
+                    }
+                }
+                catch (Exception exception)
+                {
+                    await DisplayAlert("Whoops", $"Something happened while showing notification for assessment {assessment.Name}! {exception.Message}", "Ok");
+                }
+            }
         }
 
         private async Task InitializeCourses()
@@ -37,22 +57,22 @@ namespace robert_baxter_C971_.Views
             var courses = await DatabaseService.GetAllCourses();
             var notificationId = 0;
 
-            foreach (var term in courses.Where(w => DateTime.Today.Equals(w.StartDate) || DateTime.Today.Equals(w.EndDate)).ToList())
+            foreach (var course in courses.Where(w => DateTime.Today.Equals(w.StartDate) || DateTime.Today.Equals(w.EndDate)).ToList())
             {
                 try
                 {
-                    if (DateTime.Today.Equals(term.StartDate))
+                    if (DateTime.Today.Equals(course.StartDate))
                     {
-                        CrossLocalNotifications.Current.Show("Notice", $"{term.Name} begins today!", notificationId++);
+                        CrossLocalNotifications.Current.Show("Notice", $"{course.Name} begins today!", notificationId++);
                     }
                     else
                     {
-                        CrossLocalNotifications.Current.Show("Notice", $"{term.Name} ends today!", notificationId++);
+                        CrossLocalNotifications.Current.Show("Notice", $"{course.Name} ends today!", notificationId++);
                     }
                 }
                 catch (Exception exception)
                 {
-                    await DisplayAlert("Whoops", $"Something happened while showing notification for term {term.Name}! {exception.Message}", "Ok");
+                    await DisplayAlert("Whoops", $"Something happened while showing notification for course {course.Name}! {exception.Message}", "Ok");
                 }
             }
         }

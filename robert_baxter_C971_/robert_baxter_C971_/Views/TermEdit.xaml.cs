@@ -52,6 +52,7 @@ namespace robert_baxter_C971_.Views
             _selectedTerm.EndDate = EndDatePicker.Date;
 
             await DatabaseService.UpdateTerm(_selectedTerm);
+            await DisplayAlert("Success", "Successfully saved term", "Ok");
             await Navigation.PopAsync();
         }
 
@@ -78,6 +79,11 @@ namespace robert_baxter_C971_.Views
         {
             var selectedCourse = CourseCollectionView.SelectedItem as Course;
             await Navigation.PushAsync(new CourseEdit(selectedCourse));
+        }
+
+        private async void CancelTerm_Clicked(object sender, EventArgs e)
+        {
+            await Navigation.PopAsync();
         }
     }
 }

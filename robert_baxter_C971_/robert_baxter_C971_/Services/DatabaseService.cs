@@ -34,121 +34,7 @@ namespace robert_baxter_C971_.Services
             await _dbConnection.CreateTableAsync<Widget>();
         }
 
-        public static async Task AddGadget(string name, string color, int inStock, decimal price, DateTime creationDate)
-        {
-            await Initialize();
-            await _dbConnection.InsertAsync(new Gadget
-            {
-                Name = name,
-                Color = color,
-                InStock = inStock,
-                Price = price,
-                CreationDate = creationDate
-            });
-        }
-
-        public static async Task RemoveGadget(int id)
-        {
-            await Initialize();
-
-            await _dbConnection.DeleteAsync<Gadget>(id);
-        }
-
-        public static async Task<IEnumerable<Gadget>> GetGadgets()
-        {
-            await Initialize();
-
-            return await _dbConnection.Table<Gadget>().ToListAsync();
-        }
-
-        public static async Task UpdateGadget(int id, string name, string color, int inStock, decimal price, DateTime creationDate)
-        {
-            await Initialize();
-
-            var gadget = await _dbConnection.Table<Gadget>().Where(g => g.Id == id).FirstOrDefaultAsync();
-
-            if (gadget != null)
-            {
-                gadget.Name = name;
-                gadget.Color = color;
-                gadget.InStock = inStock;
-                gadget.Price = price;
-                gadget.CreationDate = creationDate;
-
-                await _dbConnection.UpdateAsync(gadget);
-            }
-        }
-
-        public static async Task AddWidget(
-            int gadgetId,
-            string name,
-            string color,
-            int inStock,
-            decimal price,
-            DateTime creationDate,
-            bool notificationStart,
-            string notes)
-        {
-            await Initialize();
-            await _dbConnection.InsertAsync(new Widget
-            {
-                GadgetId = gadgetId,
-                Name = name,
-                Color = color,
-                InStock = inStock,
-                Price = price,
-                CreationDate = creationDate,
-                StartNotification = notificationStart,
-                Notes = notes
-            });
-        }
-
-        public static async Task RemoveWidget(int id)
-        {
-            await Initialize();
-            await _dbConnection.DeleteAsync<Widget>(id);
-        }
-
-        public static async Task<IEnumerable<Widget>> GetWidgets(int gadgetId)
-        {
-            await Initialize();
-            return await _dbConnection.Table<Widget>().Where(w => w.GadgetId == gadgetId).ToListAsync();
-        }
-
-        public static async Task<IEnumerable<Widget>> GetWidgets()
-        {
-            await Initialize();
-            return await _dbConnection.Table<Widget>().ToListAsync();
-        }
-
-        public static async Task UpdateWidget(
-            int id,
-            string name,
-            string color,
-            int inStock,
-            decimal price,
-            DateTime creationDate,
-            bool notificationStart,
-            string notes)
-        {
-            await Initialize();
-
-            var widget = await _dbConnection.Table<Widget>().FirstOrDefaultAsync(w => w.Id == id);
-
-            if (widget != null)
-            {
-                widget.Name = name;
-                widget.Color = color;
-                widget.InStock = inStock;
-                widget.Price = price;
-                widget.CreationDate = creationDate;
-                widget.StartNotification = notificationStart;
-                widget.Notes = notes;
-
-                await _dbConnection.UpdateAsync(widget);
-            }
-        }
-
+        #region Terms
         public static async Task SaveNewTerm(Term newTerm)
         {
             await Initialize();
@@ -190,7 +76,9 @@ namespace robert_baxter_C971_.Services
             await Initialize();
             await _dbConnection.UpdateAsync(selectedTerm);
         }
+        #endregion
 
+        #region Courses
         internal static async Task SaveNewCourse(Course course)
         {
             await Initialize();
@@ -218,7 +106,47 @@ namespace robert_baxter_C971_.Services
         internal static async Task DeleteCourse(Course selectedCourse)
         {
             await Initialize();
+            var assessments = await GetAssessmentsByCourse(selectedCourse);
+
+            foreach(var assessment in assessments)
+            {
+                await _dbConnection.DeleteAsync(assessment);
+            }
+
             await _dbConnection.DeleteAsync(selectedCourse);
         }
+        #endregion
+
+        #region Assessments
+        internal static async Task SaveNewAssessment(Assessment assessment)
+        {
+            await Initialize();
+            await _dbConnection.InsertAsync(assessment);
+        }
+
+        internal static async Task<IEnumerable<Assessment>> GetAssessmentsByCourse(Course selectedCourse)
+        {
+            await Initialize();
+            return await _dbConnection.Table<Assessment>().Where(assessment => assessment.CourseId == selectedCourse.Id).ToListAsync();
+        }
+
+        internal static async Task DeleteAssessment(Assessment selectedAssessment)
+        {
+            await Initialize();
+            await _dbConnection.DeleteAsync(selectedAssessment);
+        }
+
+        internal static async Task UpdateAssessment(Assessment selectedAssessment)
+        {
+            await Initialize();
+            await _dbConnection.UpdateAsync(selectedAssessment);
+        }
+
+        internal static async Task<IEnumerable<Assessment>> GetAllAssessments()
+        {
+            await Initialize();
+            return await _dbConnection.Table<Assessment>().ToListAsync();
+        }
+        #endregion
     }
 }

@@ -8,6 +8,7 @@
     <ContentPage.ToolbarItems>
         <ToolbarItem Text="Save" Clicked="SaveTerm_Clicked"></ToolbarItem>
         <ToolbarItem Text="Delete" Clicked="DeleteTerm_Clicked"></ToolbarItem>
+        <ToolbarItem Clicked="CancelTerm_Clicked" Text="Cancel"></ToolbarItem>
     </ContentPage.ToolbarItems>
     <ContentPage.Content>
         <StackLayout>

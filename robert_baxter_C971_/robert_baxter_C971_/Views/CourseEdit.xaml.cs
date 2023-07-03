@@ -28,6 +28,14 @@ namespace robert_baxter_C971_.Views
             CourseNotes.Text = _selectedCourse.Notes;
         }
 
+        protected override async void OnAppearing()
+        {
+            base.OnAppearing();
+
+            var assessments = await DatabaseService.GetAssessmentsByCourse(_selectedCourse);
+            AssessmentCollectionView.ItemsSource = assessments;
+        }
+
         private async void SaveCourse_Clicked(object sender, EventArgs e)
         {
             if (string.IsNullOrWhiteSpace(CourseName.Text))
@@ -55,6 +63,7 @@ namespace robert_baxter_C971_.Views
             _selectedCourse.Notes = CourseNotes.Text;
 
             await DatabaseService.UpdateCourse(_selectedCourse);
+            await DisplayAlert("Success", "Successfully saved course", "Ok");
             await Navigation.PopAsync();
         }
 
@@ -80,6 +89,12 @@ namespace robert_baxter_C971_.Views
         private async void AddAssessment_Clicked(object sender, EventArgs e)
         {
             await Navigation.PushAsync(new AssessmentAdd(_selectedCourse));
+        }
+
+        private async void AssessmentCollectionView_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        {
+            var selectedAssessment = AssessmentCollectionView.SelectedItem as Assessment;
+            await Navigation.PushAsync(new AssessmentEdit(selectedAssessment));
         }
     }
 }

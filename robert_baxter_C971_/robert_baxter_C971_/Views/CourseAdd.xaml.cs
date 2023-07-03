@@ -52,6 +52,7 @@ namespace robert_baxter_C971_.Views
                 Notes = CourseNotes.Text,
             });
 
+            await DisplayAlert("Success", "New Course Added", "Ok");
             await Navigation.PopAsync();
         }
 
