@@ -25,13 +25,118 @@ namespace robert_baxter_C971_.Services
                 new SQLiteAsyncConnection(Path.Combine(FileSystem.AppDataDirectory, "wgu_db.db"));
 
             await _dbConnection.CreateTableAsync<Term>();
-            await _dbConnection.CreateTableAsync<Instructor>();
             await _dbConnection.CreateTableAsync<Course>();
             await _dbConnection.CreateTableAsync<Assessment>();
 
-            // cleanup
-            await _dbConnection.CreateTableAsync<Gadget>();
-            await _dbConnection.CreateTableAsync<Widget>();
+            var termCheck = (await _dbConnection.Table<Term>().FirstOrDefaultAsync()) is null;
+
+            if (termCheck)
+            {
+                await LoadTestData();
+            }
+        }
+
+        private static async Task LoadTestData()
+        {
+            var term = new Term
+            {
+                Title = "Term 1",
+                StartDate = new DateTime(2023, 4, 1),
+                EndDate = new DateTime(2023, 10, 1),
+            };
+
+            await _dbConnection.InsertAsync(term);
+
+            var courses = new List<Course>
+            {
+                new Course
+                {
+                    TermId = term.Id,
+                    Name = "Integrated Physical Sciences",
+                    StartDate = new DateTime(2023, 4, 1),
+                    EndDate = new DateTime(2023, 5, 1),
+                    Instructor = "Sean Cummings",
+                    InstructorEmail = "srcummings@wgu.edu",
+                    InstructorPhone = "555-555-4567",
+                    Notes = "Great class, took it twice"
+                },
+                new Course
+                {
+                    TermId = term.Id,
+                    Name = "Scripting and Progamming - Foundations",
+                    StartDate = new DateTime(2023, 5, 1),
+                    EndDate = new DateTime(2023, 6, 1),
+                    Instructor = "Lindsay NaDell",
+                    InstructorEmail = "lgnadell@wgu.edu",
+                    InstructorPhone = "555-555-9999",
+                },
+                new Course
+                {
+                    TermId = term.Id,
+                    Name = "Web Development Foundations",
+                    StartDate = new DateTime(2023, 6, 1),
+                    EndDate = new DateTime(2023, 7, 1),
+                    Instructor = "Lindsay NaDell",
+                    InstructorEmail = "lgnadell@wgu.edu",
+                    InstructorPhone = "555-555-9999",
+                },
+                new Course
+                {
+                    TermId = term.Id,
+                    Name = "Critical Thinking and Logic",
+                    StartDate = new DateTime(2023, 7, 1),
+                    EndDate = new DateTime(2023, 8, 1),
+                    Instructor = "Sean Cummings",
+                    InstructorEmail = "srcummings@wgu.edu",
+                    InstructorPhone = "555-555-4567",
+                    Notes = "Great class, took it twice"
+                },
+                new Course
+                {
+                    TermId = term.Id,
+                    Name = "Scripting and Progamming - Applications",
+                    StartDate = new DateTime(2023, 8, 1),
+                    EndDate = new DateTime(2023, 9, 1),
+                    Instructor = "Lindsay NaDell",
+                    InstructorEmail = "lgnadell@wgu.edu",
+                    InstructorPhone = "555-555-9999",
+                },
+                new Course
+                {
+                    TermId = term.Id,
+                    Name = "Data Management - Foundations",
+                    StartDate = new DateTime(2023, 9, 1),
+                    EndDate = new DateTime(2023, 10, 1),
+                    Instructor = "Randall Moog",
+                    InstructorEmail = "rmoog@wgu.edu",
+                    InstructorPhone = "555-555-4564",
+                } 
+            };
+
+            await _dbConnection.InsertAllAsync(courses);
+
+            var scriptingAndProgramming = courses.FirstOrDefault(c => c.Name == "Scripting and Progamming - Applications");
+            var assessments = new List<Assessment>
+            {
+                new Assessment
+                {
+                    CourseId = scriptingAndProgramming.Id,
+                    Name = "Final Test",
+                    Type = "Objective",
+                    StartDate = new DateTime(2023, 8, 1),
+                    EndDate = new DateTime(2023, 9, 1),
+                },
+                new Assessment
+                {
+                    CourseId = scriptingAndProgramming.Id,
+                    Name = "Final Project",
+                    Type = "Performance",
+                    StartDate = new DateTime(2023, 8, 1),
+                    EndDate = new DateTime(2023, 9, 1),
+                }
+            };
+
+            await _dbConnection.InsertAllAsync(assessments);
         }
 
         #region Terms
@@ -85,7 +190,7 @@ namespace robert_baxter_C971_.Services
             await _dbConnection.InsertAsync(course);
         }
 
-        internal static async Task<IEnumerable> GetCoursesByTerm(Term selectedTerm)
+        internal static async Task<IEnumerable<Course>> GetCoursesByTerm(Term selectedTerm)
         {
             await Initialize();
             return await _dbConnection.Table<Course>().Where(course => course.TermId == selectedTerm.Id).ToListAsync();
@@ -108,7 +213,7 @@ namespace robert_baxter_C971_.Services
             await Initialize();
             var assessments = await GetAssessmentsByCourse(selectedCourse);
 
-            foreach(var assessment in assessments)
+            foreach (var assessment in assessments)
             {
                 await _dbConnection.DeleteAsync(assessment);
             }

@@ -47,6 +47,8 @@ namespace robert_baxter_C971_.Views
                 TermId = _selectedTerm.Id,
                 Name = CourseName.Text,
                 Instructor = InstructorName.Text,
+                InstructorEmail = InstructorEmail.Text,
+                InstructorPhone = InstructorPhone.Text,
                 StartDate = StartDatePicker.Date,
                 EndDate = EndDatePicker.Date,
                 Notes = CourseNotes.Text,

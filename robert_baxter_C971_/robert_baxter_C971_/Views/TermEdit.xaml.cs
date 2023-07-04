@@ -1,6 +1,7 @@
 ﻿using robert_baxter_C971_.Models;
 using robert_baxter_C971_.Services;
 using System;
+using System.Linq;
 using Xamarin.Forms;
 using Xamarin.Forms.Xaml;
 
@@ -30,7 +31,10 @@ namespace robert_baxter_C971_.Views
         {
             base.OnAppearing();
 
-            CourseCollectionView.ItemsSource = await DatabaseService.GetCoursesByTerm(_selectedTerm);
+            var courses = await DatabaseService.GetCoursesByTerm(_selectedTerm);
+            CourseCollectionView.ItemsSource = courses;
+
+            AddCourse.IsEnabled = courses.Count() <= 6;
         }
 
         private async void SaveTerm_Clicked(object sender, EventArgs e)

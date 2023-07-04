@@ -24,6 +24,9 @@
                     <RowDefinition Height="Auto" />
                     <RowDefinition Height="Auto" />
                     <RowDefinition Height="Auto" />
+                    <RowDefinition Height="Auto" />
+                    <RowDefinition Height="Auto" />
+                    <RowDefinition Height="Auto" />
                 </Grid.RowDefinitions>
 
                 <Grid.ColumnDefinitions>
@@ -49,20 +52,49 @@
                     VerticalTextAlignment="Center"
                     Text="{Binding Instructor}"></Entry>
 
-                <Label Grid.Row="2" Grid.Column="0" FontSize="Medium" VerticalTextAlignment="Center">Start Date</Label>
-                <DatePicker Grid.Row="2" Grid.Column="1" x:Name="StartDatePicker"></DatePicker>
+                <Label Grid.Row="2" Grid.Column="0" FontSize="Medium" VerticalTextAlignment="Center">Instructor Email</Label>
+                <Entry 
+                    x:Name="InstructorEmail"
+                    Placeholder="Enter Instructor Email"
+                    Grid.Row="2"
+                    Grid.Column="1"
+                    VerticalTextAlignment="Center"
+                    Text="{Binding InstructorEmail}"></Entry>
 
-                <Label Grid.Row="3" Grid.Column="0" FontSize="Medium" VerticalTextAlignment="Center">End Date</Label>
-                <DatePicker Grid.Row="3" Grid.Column="1" x:Name="EndDatePicker"></DatePicker>
+                <Label Grid.Row="3" Grid.Column="0" FontSize="Medium" VerticalTextAlignment="Center">Instructor Phone #</Label>
+                <Entry 
+                    x:Name="InstructorPhone"
+                    Placeholder="Enter Instructor Name"
+                    Grid.Row="3"
+                    Grid.Column="1"
+                    VerticalTextAlignment="Center"
+                    Text="{Binding Instructor}"></Entry>
 
-                <Label Grid.Row="4" Grid.Column="0" FontSize="Medium" VerticalTextAlignment="Center">Notes</Label>
+                <Label Grid.Row="4" Grid.Column="0" FontSize="Medium" VerticalTextAlignment="Center">Start Date</Label>
+                <DatePicker Grid.Row="4" Grid.Column="1" x:Name="StartDatePicker"></DatePicker>
+
+                <Label Grid.Row="5" Grid.Column="0" FontSize="Medium" VerticalTextAlignment="Center">End Date</Label>
+                <DatePicker Grid.Row="5" Grid.Column="1" x:Name="EndDatePicker"></DatePicker>
+
+                <Label Grid.Row="6" Grid.Column="0" FontSize="Medium" VerticalTextAlignment="Center">Notes</Label>
                 <Entry 
                     x:Name="CourseNotes"
                     Placeholder="Enter Notes"
-                    Grid.Row="4"
+                    Grid.Row="6"
                     Grid.Column="1"
                     VerticalTextAlignment="Center"
                     Text="{Binding Notes}"></Entry>
+
+                <Label Grid.Row="7" Grid.Column="0" FontSize="Medium" VerticalTextAlignment="Center">Share</Label>
+                <Button 
+                    Grid.Row="7" 
+                    Grid.Column="1" 
+                    FontSize="Medium" 
+                    VerticalOptions="Center"
+                    Text="Share Notes"
+                    x:Name="ShareNotesButton"
+                    Clicked="ShareNotesButton_Clicked"
+                    Font="Medium"></Button>
             </Grid>
             <Button x:Name="AddAssessment" Text="Add Assessment" Clicked="AddAssessment_Clicked"></Button>
             <CollectionView

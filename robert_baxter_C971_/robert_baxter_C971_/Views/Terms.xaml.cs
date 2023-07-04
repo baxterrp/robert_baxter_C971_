@@ -81,27 +81,6 @@ namespace robert_baxter_C971_.Views
         {
             var terms = await DatabaseService.GetAllTerms();
             TermsView.ItemsSource = terms;
-
-            var notificationId = 0;
-
-            foreach (var term in terms.Where(w => DateTime.Today.Equals(w.StartDate) || DateTime.Today.Equals(w.EndDate)).ToList())
-            {
-                try
-                {
-                    if (DateTime.Today.Equals(term.StartDate))
-                    {
-                        CrossLocalNotifications.Current.Show("Notice", $"{term.Title} begins today!", notificationId++);
-                    }
-                    else
-                    {
-                        CrossLocalNotifications.Current.Show("Notice", $"{term.Title} ends today!", notificationId++);
-                    }
-                }
-                catch (Exception exception)
-                {
-                    await DisplayAlert("Whoops", $"Something happened while showing notification for term {term.Title}! {exception.Message}", "Ok");
-                }
-            }
         }
 
         private async void TermsView_SelectionChanged(object sender, SelectionChangedEventArgs e)

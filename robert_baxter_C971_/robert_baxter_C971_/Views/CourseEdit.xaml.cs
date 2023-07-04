@@ -1,6 +1,7 @@
 ﻿using robert_baxter_C971_.Models;
 using robert_baxter_C971_.Services;
 using System;
+using Xamarin.Essentials;
 using Xamarin.Forms;
 using Xamarin.Forms.Xaml;
 
@@ -23,6 +24,8 @@ namespace robert_baxter_C971_.Views
 
             CourseName.Text = _selectedCourse.Name;
             InstructorName.Text = _selectedCourse.Instructor;
+            InstructorEmail.Text = _selectedCourse.InstructorEmail;
+            InstructorPhone.Text = _selectedCourse.InstructorPhone;
             StartDatePicker.Date = _selectedCourse.StartDate;
             EndDatePicker.Date = _selectedCourse.EndDate;
             CourseNotes.Text = _selectedCourse.Notes;
@@ -58,6 +61,8 @@ namespace robert_baxter_C971_.Views
 
             _selectedCourse.Name = CourseName.Text;
             _selectedCourse.Instructor = InstructorName.Text;
+            _selectedCourse.InstructorPhone = InstructorPhone.Text;
+            _selectedCourse.InstructorEmail = InstructorEmail.Text;
             _selectedCourse.StartDate = StartDatePicker.Date;
             _selectedCourse.EndDate = EndDatePicker.Date;
             _selectedCourse.Notes = CourseNotes.Text;
@@ -95,6 +100,15 @@ namespace robert_baxter_C971_.Views
         {
             var selectedAssessment = AssessmentCollectionView.SelectedItem as Assessment;
             await Navigation.PushAsync(new AssessmentEdit(selectedAssessment));
+        }
+
+        private async void ShareNotesButton_Clicked(object sender, EventArgs e)
+        {
+            await Share.RequestAsync(new ShareTextRequest
+            {
+                Text = _selectedCourse.Notes,
+                Title = $"Course {_selectedCourse.Name} Notes",
+            });
         }
     }
 }
