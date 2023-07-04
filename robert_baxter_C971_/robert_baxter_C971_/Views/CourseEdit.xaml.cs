@@ -28,6 +28,7 @@ namespace robert_baxter_C971_.Views
             InstructorPhone.Text = _selectedCourse.InstructorPhone;
             StartDatePicker.Date = _selectedCourse.StartDate;
             EndDatePicker.Date = _selectedCourse.EndDate;
+            CourseStatusPicker.SelectedItem = _selectedCourse.Progress;
             CourseNotes.Text = _selectedCourse.Notes;
         }
 

@@ -8,6 +8,7 @@ namespace robert_baxter_C971_.Models
         [PrimaryKey, AutoIncrement]
         public int Id { get; set; }
         public int TermId { get; set; }
+        public string Progress { get; set; }
         public string Instructor { get; set; }
         public string InstructorEmail { get; set; }
         public string InstructorPhone { get; set; }

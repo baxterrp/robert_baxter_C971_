@@ -27,6 +27,7 @@
                     <RowDefinition Height="Auto" />
                     <RowDefinition Height="Auto" />
                     <RowDefinition Height="Auto" />
+                    <RowDefinition Height="Auto" />
                 </Grid.RowDefinitions>
 
                 <Grid.ColumnDefinitions>
@@ -76,18 +77,28 @@
                 <Label Grid.Row="5" Grid.Column="0" FontSize="Medium" VerticalTextAlignment="Center">End Date</Label>
                 <DatePicker Grid.Row="5" Grid.Column="1" x:Name="EndDatePicker"></DatePicker>
 
-                <Label Grid.Row="6" Grid.Column="0" FontSize="Medium" VerticalTextAlignment="Center">Notes</Label>
+                <Label Grid.Row="6" Grid.Column="0" FontSize="Medium" VerticalTextAlignment="Center">Type</Label>
+                <Picker Grid.Row="6" Grid.Column="1" FontSize="Medium" x:Name="CourseStatusPicker" Title="Select a status">
+                    <Picker.Items>
+                        <x:String>In Progress</x:String>
+                        <x:String>Completed</x:String>
+                        <x:String>Dropped</x:String>
+                        <x:String>Plan to take</x:String>
+                    </Picker.Items>
+                </Picker>
+                
+                <Label Grid.Row="7" Grid.Column="0" FontSize="Medium" VerticalTextAlignment="Center">Notes</Label>
                 <Entry 
                     x:Name="CourseNotes"
                     Placeholder="Enter Notes"
-                    Grid.Row="6"
+                    Grid.Row="7"
                     Grid.Column="1"
                     VerticalTextAlignment="Center"
                     Text="{Binding Notes}"></Entry>
 
-                <Label Grid.Row="7" Grid.Column="0" FontSize="Medium" VerticalTextAlignment="Center">Share</Label>
+                <Label Grid.Row="8" Grid.Column="0" FontSize="Medium" VerticalTextAlignment="Center">Share</Label>
                 <Button 
-                    Grid.Row="7" 
+                    Grid.Row="8" 
                     Grid.Column="1" 
                     FontSize="Medium" 
                     VerticalOptions="Center"

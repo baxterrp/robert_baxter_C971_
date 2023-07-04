@@ -1,7 +1,6 @@
 ﻿using robert_baxter_C971_.Models;
 using SQLite;
 using System;
-using System.Collections;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
@@ -58,6 +57,7 @@ namespace robert_baxter_C971_.Services
                     Instructor = "Sean Cummings",
                     InstructorEmail = "srcummings@wgu.edu",
                     InstructorPhone = "555-555-4567",
+                    Progress = "Completed",
                     Notes = "Great class, took it twice"
                 },
                 new Course
@@ -69,6 +69,7 @@ namespace robert_baxter_C971_.Services
                     Instructor = "Lindsay NaDell",
                     InstructorEmail = "lgnadell@wgu.edu",
                     InstructorPhone = "555-555-9999",
+                    Progress = "In Progress",
                 },
                 new Course
                 {
@@ -79,6 +80,7 @@ namespace robert_baxter_C971_.Services
                     Instructor = "Lindsay NaDell",
                     InstructorEmail = "lgnadell@wgu.edu",
                     InstructorPhone = "555-555-9999",
+                    Progress = "Plan to take",
                 },
                 new Course
                 {
@@ -89,7 +91,8 @@ namespace robert_baxter_C971_.Services
                     Instructor = "Sean Cummings",
                     InstructorEmail = "srcummings@wgu.edu",
                     InstructorPhone = "555-555-4567",
-                    Notes = "Great class, took it twice"
+                    Notes = "Great class, took it twice",
+                    Progress = "Plan to take",
                 },
                 new Course
                 {
@@ -100,6 +103,7 @@ namespace robert_baxter_C971_.Services
                     Instructor = "Lindsay NaDell",
                     InstructorEmail = "lgnadell@wgu.edu",
                     InstructorPhone = "555-555-9999",
+                    Progress = "Plan to take",
                 },
                 new Course
                 {
@@ -110,6 +114,7 @@ namespace robert_baxter_C971_.Services
                     Instructor = "Randall Moog",
                     InstructorEmail = "rmoog@wgu.edu",
                     InstructorPhone = "555-555-4564",
+                    Progress = "Plan to take",
                 } 
             };
 

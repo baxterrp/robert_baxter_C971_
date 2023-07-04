@@ -34,7 +34,7 @@ namespace robert_baxter_C971_.Views
             var courses = await DatabaseService.GetCoursesByTerm(_selectedTerm);
             CourseCollectionView.ItemsSource = courses;
 
-            AddCourse.IsEnabled = courses.Count() <= 6;
+            AddCourse.IsEnabled = courses.Count() < 6;
         }
 
         private async void SaveTerm_Clicked(object sender, EventArgs e)

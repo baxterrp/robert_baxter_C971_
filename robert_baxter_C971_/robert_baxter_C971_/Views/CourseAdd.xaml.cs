@@ -51,6 +51,7 @@ namespace robert_baxter_C971_.Views
                 InstructorPhone = InstructorPhone.Text,
                 StartDate = StartDatePicker.Date,
                 EndDate = EndDatePicker.Date,
+                Progress = CourseStatusPicker.SelectedItem.ToString(),
                 Notes = CourseNotes.Text,
             });
 
