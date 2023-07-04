@@ -3,6 +3,7 @@ using SQLite;
 using System;
 using System.Collections.Generic;
 using System.IO;
+using System.Linq;
 using System.Threading.Tasks;
 using Xamarin.Essentials;
 
@@ -14,131 +15,248 @@ namespace robert_baxter_C971_.Services
 
         public static async Task Initialize()
         {
-            if(_dbConnection != null)
+            if (_dbConnection != null)
             {
                 return;
             }
 
-            var path = Path.Combine(FileSystem.AppDataDirectory, "Gadgets.db");
-            _dbConnection = new SQLiteAsyncConnection(path);
+            _dbConnection =
+                new SQLiteAsyncConnection(Path.Combine(FileSystem.AppDataDirectory, "wgu_db.db"));
 
-            await _dbConnection.CreateTableAsync<Gadget>();
-            await _dbConnection.CreateTableAsync<Widget>();
-        }
+            await _dbConnection.CreateTableAsync<Term>();
+            await _dbConnection.CreateTableAsync<Course>();
+            await _dbConnection.CreateTableAsync<Assessment>();
 
-        public static async Task AddGadget(string name, string color, int inStock, decimal price, DateTime creationDate)
-        {
-            await Initialize();
-            await _dbConnection.InsertAsync(new Gadget
+            var termCheck = (await _dbConnection.Table<Term>().FirstOrDefaultAsync()) is null;
+
+            if (termCheck)
             {
-                Name = name,
-                Color = color,
-                InStock = inStock,
-                Price = price,
-                CreationDate = creationDate
-            });
-        }
-
-        public static async Task RemoveGadget(int id)
-        {
-            await Initialize();
-
-            await _dbConnection.DeleteAsync<Gadget>(id);
-        }
-
-        public static async Task<IEnumerable<Gadget>> GetGadgets()
-        {
-            await Initialize();
-
-            return await _dbConnection.Table<Gadget>().ToListAsync();
-        }
-
-        public static async Task UpdateGadget(int id, string name, string color, int inStock, decimal price, DateTime creationDate)
-        {
-            await Initialize();
-
-            var gadget = await _dbConnection.Table<Gadget>().Where(g => g.Id == id).FirstOrDefaultAsync();
-
-            if (gadget != null)
-            {
-                gadget.Name = name;
-                gadget.Color = color;
-                gadget.InStock = inStock;
-                gadget.Price = price;
-                gadget.CreationDate = creationDate;
-
-                await _dbConnection.UpdateAsync(gadget);
+                await LoadTestData();
             }
         }
 
-        public static async Task AddWidget(
-            int gadgetId,
-            string name,
-            string color,
-            int inStock,
-            decimal price,
-            DateTime creationDate,
-            bool notificationStart,
-            string notes)
+        private static async Task LoadTestData()
         {
-            await Initialize();
-            await _dbConnection.InsertAsync(new Widget
+            var term = new Term
             {
-                GadgetId = gadgetId,
-                Name = name,
-                Color = color,
-                InStock = inStock,
-                Price = price,
-                CreationDate = creationDate,
-                StartNotification = notificationStart,
-                Notes = notes
-            });
-        }
+                Title = "Term 1",
+                StartDate = new DateTime(2023, 4, 1),
+                EndDate = new DateTime(2023, 10, 1),
+            };
 
-        public static async Task RemoveWidget(int id)
-        {
-            await Initialize();
-            await _dbConnection.DeleteAsync<Widget>(id);
-        }
+            await _dbConnection.InsertAsync(term);
 
-        public static async Task<IEnumerable<Widget>> GetWidgets(int gadgetId)
-        {
-            await Initialize();
-            return await _dbConnection.Table<Widget>().Where(w => w.GadgetId == gadgetId).ToListAsync();
-        }
-
-        public static async Task<IEnumerable<Widget>> GetWidgets()
-        {
-            await Initialize();
-            return await _dbConnection.Table<Widget>().ToListAsync();
-        }
-
-        public static async Task UpdateWidget(
-            int id,
-            string name,
-            string color,
-            int inStock,
-            decimal price,
-            DateTime creationDate,
-            bool notificationStart,
-            string notes)
-        {
-            await Initialize();
-
-            var widget = await _dbConnection.Table<Widget>().FirstOrDefaultAsync(w => w.Id == id);
-
-            if (widget != null)
+            var courses = new List<Course>
             {
-                widget.Name = name;
-                widget.Color = color;
-                widget.InStock = inStock;
-                widget.Price = price;
-                widget.CreationDate = creationDate;
-                widget.StartNotification = notificationStart;
-                widget.Notes = notes;
+                new Course
+                {
+                    TermId = term.Id,
+                    Name = "Integrated Physical Sciences",
+                    StartDate = new DateTime(2023, 4, 1),
+                    EndDate = new DateTime(2023, 5, 1),
+                    Instructor = "Robert Baxter",
+                    InstructorEmail = "rbaxt19@wgu.edu",
+                    InstructorPhone = "231-830-4087",
+                    Progress = "Completed",
+                    Notes = "Great class, took it twice"
+                },
+                new Course
+                {
+                    TermId = term.Id,
+                    Name = "Scripting and Progamming - Foundations",
+                    StartDate = new DateTime(2023, 5, 1),
+                    EndDate = new DateTime(2023, 6, 1),
+                    Instructor = "Robert Baxter",
+                    InstructorEmail = "rbaxt19@wgu.edu",
+                    InstructorPhone = "231-830-4087",
+                    Progress = "In Progress",
+                },
+                new Course
+                {
+                    TermId = term.Id,
+                    Name = "Web Development Foundations",
+                    StartDate = new DateTime(2023, 6, 1),
+                    EndDate = new DateTime(2023, 7, 1),
+                    Instructor = "Robert Baxter",
+                    InstructorEmail = "rbaxt19@wgu.edu",
+                    InstructorPhone = "231-830-4087",
+                    Progress = "Plan to take",
+                },
+                new Course
+                {
+                    TermId = term.Id,
+                    Name = "Critical Thinking and Logic",
+                    StartDate = new DateTime(2023, 7, 1),
+                    EndDate = new DateTime(2023, 8, 1),
+                    Instructor = "Robert Baxter",
+                    InstructorEmail = "rbaxt19@wgu.edu",
+                    InstructorPhone = "231-830-4087",
+                    Notes = "Great class, took it twice",
+                    Progress = "Plan to take",
+                },
+                new Course
+                {
+                    TermId = term.Id,
+                    Name = "Scripting and Progamming - Applications",
+                    StartDate = new DateTime(2023, 8, 1),
+                    EndDate = new DateTime(2023, 9, 1),
+                    Instructor = "Robert Baxter",
+                    InstructorEmail = "rbaxt19@wgu.edu",
+                    InstructorPhone = "231-830-4087",
+                    Progress = "Plan to take",
+                },
+                new Course
+                {
+                    TermId = term.Id,
+                    Name = "Data Management - Foundations",
+                    StartDate = new DateTime(2023, 9, 1),
+                    EndDate = new DateTime(2023, 10, 1),
+                    Instructor = "Robert Baxter",
+                    InstructorEmail = "rbaxt19@wgu.edu",
+                    InstructorPhone = "231-830-4087",
+                    Progress = "Plan to take",
+                } 
+            };
 
-                await _dbConnection.UpdateAsync(widget);
+            await _dbConnection.InsertAllAsync(courses);
+
+            var scriptingAndProgramming = courses.FirstOrDefault(c => c.Name == "Scripting and Progamming - Foundations");
+            var assessments = new List<Assessment>
+            {
+                new Assessment
+                {
+                    CourseId = scriptingAndProgramming.Id,
+                    Name = "Final Test",
+                    Type = "Objective",
+                    StartDate = new DateTime(2023, 8, 1),
+                    EndDate = new DateTime(2023, 9, 1),
+                },
+                new Assessment
+                {
+                    CourseId = scriptingAndProgramming.Id,
+                    Name = "Final Project",
+                    Type = "Performance",
+                    StartDate = new DateTime(2023, 8, 1),
+                    EndDate = new DateTime(2023, 9, 1),
+                }
+            };
+
+            await _dbConnection.InsertAllAsync(assessments);
+        }
+
+        #region Terms
+        public static async Task SaveNewTerm(Term newTerm)
+        {
+            await Initialize();
+            await _dbConnection.InsertAsync(newTerm);
+        }
+
+        public static async Task<IEnumerable<Term>> GetAllTerms()
+        {
+            await Initialize();
+            return await _dbConnection.Table<Term>().ToListAsync();
+        }
+
+        internal static async Task DeleteTerm(Term term)
+        {
+            await Initialize();
+
+            var courses = await _dbConnection.Table<Course>().Where(course => course.TermId == term.Id).ToListAsync();
+            var courseIds = courses.Select(course => course.Id).ToArray();
+            var assessments =
+                await _dbConnection.Table<Assessment>()
+                    .Where(assessment => courseIds.Contains(assessment.CourseId))
+                    .ToListAsync();
+
+            foreach (var assessment in assessments)
+            {
+                await _dbConnection.DeleteAsync(assessment);
             }
+
+            foreach (var course in courses)
+            {
+                await _dbConnection.DeleteAsync(course);
+            }
+
+            await _dbConnection.DeleteAsync(term);
         }
+
+        internal static async Task UpdateTerm(Term selectedTerm)
+        {
+            await Initialize();
+            await _dbConnection.UpdateAsync(selectedTerm);
+        }
+        #endregion
+
+        #region Courses
+        internal static async Task SaveNewCourse(Course course)
+        {
+            await Initialize();
+            await _dbConnection.InsertAsync(course);
+        }
+
+        internal static async Task<IEnumerable<Course>> GetCoursesByTerm(Term selectedTerm)
+        {
+            await Initialize();
+            return await _dbConnection.Table<Course>().Where(course => course.TermId == selectedTerm.Id).ToListAsync();
+        }
+
+        internal static async Task UpdateCourse(Course course)
+        {
+            await Initialize();
+            await _dbConnection.UpdateAsync(course);
+        }
+
+        internal static async Task<IEnumerable<Course>> GetAllCourses()
+        {
+            await Initialize();
+            return await _dbConnection.Table<Course>().ToListAsync();
+        }
+
+        internal static async Task DeleteCourse(Course selectedCourse)
+        {
+            await Initialize();
+            var assessments = await GetAssessmentsByCourse(selectedCourse);
+
+            foreach (var assessment in assessments)
+            {
+                await _dbConnection.DeleteAsync(assessment);
+            }
+
+            await _dbConnection.DeleteAsync(selectedCourse);
+        }
+        #endregion
+
+        #region Assessments
+        internal static async Task SaveNewAssessment(Assessment assessment)
+        {
+            await Initialize();
+            await _dbConnection.InsertAsync(assessment);
+        }
+
+        internal static async Task<IEnumerable<Assessment>> GetAssessmentsByCourse(Course selectedCourse)
+        {
+            await Initialize();
+            return await _dbConnection.Table<Assessment>().Where(assessment => assessment.CourseId == selectedCourse.Id).ToListAsync();
+        }
+
+        internal static async Task DeleteAssessment(Assessment selectedAssessment)
+        {
+            await Initialize();
+            await _dbConnection.DeleteAsync(selectedAssessment);
+        }
+
+        internal static async Task UpdateAssessment(Assessment selectedAssessment)
+        {
+            await Initialize();
+            await _dbConnection.UpdateAsync(selectedAssessment);
+        }
+
+        internal static async Task<IEnumerable<Assessment>> GetAllAssessments()
+        {
+            await Initialize();
+            return await _dbConnection.Table<Assessment>().ToListAsync();
+        }
+        #endregion
     }
 }
