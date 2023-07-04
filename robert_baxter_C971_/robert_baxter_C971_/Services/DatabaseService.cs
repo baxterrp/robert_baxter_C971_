@@ -54,9 +54,9 @@ namespace robert_baxter_C971_.Services
                     Name = "Integrated Physical Sciences",
                     StartDate = new DateTime(2023, 4, 1),
                     EndDate = new DateTime(2023, 5, 1),
-                    Instructor = "Sean Cummings",
-                    InstructorEmail = "srcummings@wgu.edu",
-                    InstructorPhone = "555-555-4567",
+                    Instructor = "Robert Baxter",
+                    InstructorEmail = "rbaxt19@wgu.edu",
+                    InstructorPhone = "231-830-4087",
                     Progress = "Completed",
                     Notes = "Great class, took it twice"
                 },
@@ -66,9 +66,9 @@ namespace robert_baxter_C971_.Services
                     Name = "Scripting and Progamming - Foundations",
                     StartDate = new DateTime(2023, 5, 1),
                     EndDate = new DateTime(2023, 6, 1),
-                    Instructor = "Lindsay NaDell",
-                    InstructorEmail = "lgnadell@wgu.edu",
-                    InstructorPhone = "555-555-9999",
+                    Instructor = "Robert Baxter",
+                    InstructorEmail = "rbaxt19@wgu.edu",
+                    InstructorPhone = "231-830-4087",
                     Progress = "In Progress",
                 },
                 new Course
@@ -77,9 +77,9 @@ namespace robert_baxter_C971_.Services
                     Name = "Web Development Foundations",
                     StartDate = new DateTime(2023, 6, 1),
                     EndDate = new DateTime(2023, 7, 1),
-                    Instructor = "Lindsay NaDell",
-                    InstructorEmail = "lgnadell@wgu.edu",
-                    InstructorPhone = "555-555-9999",
+                    Instructor = "Robert Baxter",
+                    InstructorEmail = "rbaxt19@wgu.edu",
+                    InstructorPhone = "231-830-4087",
                     Progress = "Plan to take",
                 },
                 new Course
@@ -88,9 +88,9 @@ namespace robert_baxter_C971_.Services
                     Name = "Critical Thinking and Logic",
                     StartDate = new DateTime(2023, 7, 1),
                     EndDate = new DateTime(2023, 8, 1),
-                    Instructor = "Sean Cummings",
-                    InstructorEmail = "srcummings@wgu.edu",
-                    InstructorPhone = "555-555-4567",
+                    Instructor = "Robert Baxter",
+                    InstructorEmail = "rbaxt19@wgu.edu",
+                    InstructorPhone = "231-830-4087",
                     Notes = "Great class, took it twice",
                     Progress = "Plan to take",
                 },
@@ -100,9 +100,9 @@ namespace robert_baxter_C971_.Services
                     Name = "Scripting and Progamming - Applications",
                     StartDate = new DateTime(2023, 8, 1),
                     EndDate = new DateTime(2023, 9, 1),
-                    Instructor = "Lindsay NaDell",
-                    InstructorEmail = "lgnadell@wgu.edu",
-                    InstructorPhone = "555-555-9999",
+                    Instructor = "Robert Baxter",
+                    InstructorEmail = "rbaxt19@wgu.edu",
+                    InstructorPhone = "231-830-4087",
                     Progress = "Plan to take",
                 },
                 new Course
@@ -111,16 +111,16 @@ namespace robert_baxter_C971_.Services
                     Name = "Data Management - Foundations",
                     StartDate = new DateTime(2023, 9, 1),
                     EndDate = new DateTime(2023, 10, 1),
-                    Instructor = "Randall Moog",
-                    InstructorEmail = "rmoog@wgu.edu",
-                    InstructorPhone = "555-555-4564",
+                    Instructor = "Robert Baxter",
+                    InstructorEmail = "rbaxt19@wgu.edu",
+                    InstructorPhone = "231-830-4087",
                     Progress = "Plan to take",
                 } 
             };
 
             await _dbConnection.InsertAllAsync(courses);
 
-            var scriptingAndProgramming = courses.FirstOrDefault(c => c.Name == "Scripting and Progamming - Applications");
+            var scriptingAndProgramming = courses.FirstOrDefault(c => c.Name == "Scripting and Progamming - Foundations");
             var assessments = new List<Assessment>
             {
                 new Assessment
