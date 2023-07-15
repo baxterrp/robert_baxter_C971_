@@ -28,6 +28,7 @@
                     <RowDefinition Height="Auto" />
                     <RowDefinition Height="Auto" />
                     <RowDefinition Height="Auto" />
+                    <RowDefinition Height="Auto" />
                 </Grid.RowDefinitions>
 
                 <Grid.ColumnDefinitions>
@@ -107,6 +108,10 @@
                     Clicked="ShareNotesButton_Clicked"
                     Font="Medium"></Button>
             </Grid>
+            
+            <Label Grid.Row="9" Grid.Column="0" Text="Notify" FontSize="Medium"/>
+            <Switch Grid.Row="9" Grid.Column="1" x:Name="Notification" HorizontalOptions="End" IsToggled="True"/>
+            
             <Button x:Name="AddAssessment" Text="Add Assessment" Clicked="AddAssessment_Clicked"></Button>
             <CollectionView
                 x:Name="AssessmentCollectionView"

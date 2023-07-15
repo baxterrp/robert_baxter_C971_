@@ -1,6 +1,8 @@
 ﻿using robert_baxter_C971_.Models;
 using robert_baxter_C971_.Services;
 using System;
+using System.Linq;
+using System.Net.Mail;
 using Xamarin.Essentials;
 using Xamarin.Forms;
 using Xamarin.Forms.Xaml;
@@ -30,6 +32,7 @@ namespace robert_baxter_C971_.Views
             EndDatePicker.Date = _selectedCourse.EndDate;
             CourseStatusPicker.SelectedItem = _selectedCourse.Progress;
             CourseNotes.Text = _selectedCourse.Notes;
+            Notification.IsToggled = _selectedCourse.Notify;
         }
 
         protected override async void OnAppearing()
@@ -38,6 +41,8 @@ namespace robert_baxter_C971_.Views
 
             var assessments = await DatabaseService.GetAssessmentsByCourse(_selectedCourse);
             AssessmentCollectionView.ItemsSource = assessments;
+
+            AddAssessment.IsEnabled = assessments.Count() < 2;
         }
 
         private async void SaveCourse_Clicked(object sender, EventArgs e)
@@ -54,6 +59,34 @@ namespace robert_baxter_C971_.Views
                 return;
             }
 
+            if (string.IsNullOrWhiteSpace(InstructorEmail.Text))
+            {
+                await DisplayAlert("Error", "Please enter an instructor email", "Ok");
+                return;
+            }
+            else
+            {
+                try
+                {
+                    // if the MailAddress class cannot parse the email text it is an invalid input
+                    // from Microsoft:         
+                    //   T:System.FormatException:
+                    //   address is not in a recognized format. -or- address contains non-ASCII characters.
+                    var _ = new MailAddress(InstructorEmail.Text);
+                }
+                catch (FormatException)
+                {
+                    await DisplayAlert("Error", $"{InstructorEmail.Text} is not a valid email", "Ok");
+                    return;
+                }
+            }
+
+            if (string.IsNullOrWhiteSpace(InstructorPhone.Text))
+            {
+                await DisplayAlert("Error", $"Please enter an instructor phone number", "Ok");
+                return;
+            }
+
             if (EndDatePicker.Date < StartDatePicker.Date)
             {
                 await DisplayAlert("Error", "Course end date cannot precede start date", "Ok");
@@ -67,6 +100,7 @@ namespace robert_baxter_C971_.Views
             _selectedCourse.StartDate = StartDatePicker.Date;
             _selectedCourse.EndDate = EndDatePicker.Date;
             _selectedCourse.Notes = CourseNotes.Text;
+            _selectedCourse.Notify = Notification.IsToggled;
 
             await DatabaseService.UpdateCourse(_selectedCourse);
             await DisplayAlert("Success", "Successfully saved course", "Ok");

@@ -1,6 +1,8 @@
 ﻿using robert_baxter_C971_.Models;
 using robert_baxter_C971_.Services;
 using System;
+using System.Net.Mail;
+using System.Text.RegularExpressions;
 using Xamarin.Forms;
 using Xamarin.Forms.Xaml;
 
@@ -36,6 +38,34 @@ namespace robert_baxter_C971_.Views
                 return;
             }
 
+            if (string.IsNullOrWhiteSpace(InstructorEmail.Text))
+            {
+                await DisplayAlert("Error", "Please enter an instructor email", "Ok");
+                return;
+            }
+            else
+            {
+                try
+                {
+                    // if the MailAddress class cannot parse the email text it is an invalid input
+                    // from Microsoft:         
+                    //   T:System.FormatException:
+                    //   address is not in a recognized format. -or- address contains non-ASCII characters.
+                    var _ = new MailAddress(InstructorEmail.Text);
+                }
+                catch (FormatException)
+                {
+                    await DisplayAlert("Error", $"{InstructorEmail.Text} is not a valid email", "Ok");
+                    return;
+                }
+            }
+
+            if (string.IsNullOrWhiteSpace(InstructorPhone.Text))
+            {
+                await DisplayAlert("Error", $"Please enter an instructor phone number", "Ok");
+                return;
+            }
+
             if (EndDatePicker.Date < StartDatePicker.Date)
             {
                 await DisplayAlert("Error", "Course end date cannot precede start date", "Ok");
@@ -52,7 +82,8 @@ namespace robert_baxter_C971_.Views
                 StartDate = StartDatePicker.Date,
                 EndDate = EndDatePicker.Date,
                 Progress = CourseStatusPicker.SelectedItem.ToString(),
-                Notes = CourseNotes.Text,
+                Notes = CourseNotes.Text ?? string.Empty,
+                Notify = Notification.IsToggled,
             });
 
             await DisplayAlert("Success", "New Course Added", "Ok");

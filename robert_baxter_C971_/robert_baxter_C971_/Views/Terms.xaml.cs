@@ -32,7 +32,13 @@ namespace robert_baxter_C971_.Views
             var assessments = await DatabaseService.GetAllAssessments();
             var notificationId = 0;
 
-            foreach (var assessment in assessments.Where(w => DateTime.Today.Equals(w.StartDate) || DateTime.Today.Equals(w.EndDate)).ToList())
+            foreach (var assessment in assessments
+                .Where(
+                    a => 
+                        a.Notify &&
+                        (DateTime.Today.Equals(a.StartDate) || 
+                        DateTime.Today.Equals(a.EndDate)))
+                .ToList())
             {
                 try
                 {
@@ -57,7 +63,13 @@ namespace robert_baxter_C971_.Views
             var courses = await DatabaseService.GetAllCourses();
             var notificationId = 0;
 
-            foreach (var course in courses.Where(w => DateTime.Today.Equals(w.StartDate) || DateTime.Today.Equals(w.EndDate)).ToList())
+            foreach (var course in courses
+                .Where(
+                    c =>
+                        c.Notify &&
+                        (DateTime.Today.Equals(c.StartDate) ||
+                        DateTime.Today.Equals(c.EndDate)))
+                .ToList())
             {
                 try
                 {

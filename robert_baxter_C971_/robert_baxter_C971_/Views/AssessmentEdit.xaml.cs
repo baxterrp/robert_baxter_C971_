@@ -1,5 +1,6 @@
 ﻿using robert_baxter_C971_.Models;
 using robert_baxter_C971_.Services;
+using System.Linq;
 using Xamarin.Forms;
 using Xamarin.Forms.Xaml;
 
@@ -24,6 +25,7 @@ namespace robert_baxter_C971_.Views
             AssessmentTypePicker.SelectedItem = _selectedAssessment.Type;
             StartDatePicker.Date = _selectedAssessment.StartDate;
             EndDatePicker.Date = _selectedAssessment.EndDate;
+            Notification.IsToggled = _selectedAssessment.Notify;
         }
 
         private async void DeleteAssessment_Clicked(object sender, System.EventArgs e)
@@ -60,10 +62,24 @@ namespace robert_baxter_C971_.Views
                 return;
             }
 
+            var selectedAssessmentType = AssessmentTypePicker.SelectedItem.ToString();
+
             _selectedAssessment.Name = AssessmentName.Text;
             _selectedAssessment.Type = AssessmentTypePicker.SelectedItem.ToString();
             _selectedAssessment.StartDate = StartDatePicker.Date;
             _selectedAssessment.EndDate = EndDatePicker.Date;
+            _selectedAssessment.Notify = Notification.IsToggled;
+
+            var course = await DatabaseService.GetCourseByCourseId(_selectedAssessment.CourseId);
+            var conflictingAssessments = (await DatabaseService.GetAssessmentsByCourse(course))
+                .Where(assessment => assessment.Id != _selectedAssessment.Id && selectedAssessmentType.Equals(assessment.Type))
+                .ToList();
+
+            if (conflictingAssessments.Any())
+            {
+                await DisplayAlert("Error", $"An assessment of type {selectedAssessmentType} has already been added to this course", "Ok");
+                return;
+            }
 
             await DatabaseService.UpdateAssessment(_selectedAssessment);
             await DisplayAlert("Success", "Successfully saved assessment", "Ok");

@@ -58,7 +58,8 @@ namespace robert_baxter_C971_.Services
                     InstructorEmail = "rbaxt19@wgu.edu",
                     InstructorPhone = "231-830-4087",
                     Progress = "Completed",
-                    Notes = "Great class, took it twice"
+                    Notes = "Great class, took it twice",
+                    Notify = true,
                 },
                 new Course
                 {
@@ -70,6 +71,7 @@ namespace robert_baxter_C971_.Services
                     InstructorEmail = "rbaxt19@wgu.edu",
                     InstructorPhone = "231-830-4087",
                     Progress = "In Progress",
+                    Notify = true,
                 },
                 new Course
                 {
@@ -81,6 +83,7 @@ namespace robert_baxter_C971_.Services
                     InstructorEmail = "rbaxt19@wgu.edu",
                     InstructorPhone = "231-830-4087",
                     Progress = "Plan to take",
+                    Notify = true,
                 },
                 new Course
                 {
@@ -93,6 +96,7 @@ namespace robert_baxter_C971_.Services
                     InstructorPhone = "231-830-4087",
                     Notes = "Great class, took it twice",
                     Progress = "Plan to take",
+                    Notify = true,
                 },
                 new Course
                 {
@@ -104,6 +108,7 @@ namespace robert_baxter_C971_.Services
                     InstructorEmail = "rbaxt19@wgu.edu",
                     InstructorPhone = "231-830-4087",
                     Progress = "Plan to take",
+                    Notify = true,
                 },
                 new Course
                 {
@@ -115,6 +120,7 @@ namespace robert_baxter_C971_.Services
                     InstructorEmail = "rbaxt19@wgu.edu",
                     InstructorPhone = "231-830-4087",
                     Progress = "Plan to take",
+                    Notify = true,
                 } 
             };
 
@@ -130,6 +136,7 @@ namespace robert_baxter_C971_.Services
                     Type = "Objective",
                     StartDate = new DateTime(2023, 8, 1),
                     EndDate = new DateTime(2023, 9, 1),
+                    Notify = true,
                 },
                 new Assessment
                 {
@@ -138,6 +145,7 @@ namespace robert_baxter_C971_.Services
                     Type = "Performance",
                     StartDate = new DateTime(2023, 8, 1),
                     EndDate = new DateTime(2023, 9, 1),
+                    Notify = true,
                 }
             };
 
@@ -211,6 +219,12 @@ namespace robert_baxter_C971_.Services
         {
             await Initialize();
             return await _dbConnection.Table<Course>().ToListAsync();
+        }
+
+        internal static async Task<Course> GetCourseByCourseId(int id)
+        {
+            await Initialize();
+            return await _dbConnection.Table<Course>().FirstOrDefaultAsync(course => course.Id == id);
         }
 
         internal static async Task DeleteCourse(Course selectedCourse)

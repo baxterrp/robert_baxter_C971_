@@ -52,6 +52,9 @@
 
                 <Label Grid.Row="3" Grid.Column="0" FontSize="Medium" VerticalTextAlignment="Center">End Date</Label>
                 <DatePicker Grid.Row="3" Grid.Column="1" x:Name="EndDatePicker"></DatePicker>
+
+                <Label Grid.Row="4" Grid.Column="0" Text="Notify" FontSize="Medium"/>
+                <Switch Grid.Row="4" Grid.Column="1" x:Name="Notification" HorizontalOptions="End" IsToggled="True"/>
             </Grid>
         </StackLayout>
     </ContentPage.Content>

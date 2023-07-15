@@ -26,6 +26,7 @@
                     <RowDefinition Height="Auto" />
                     <RowDefinition Height="Auto" />
                     <RowDefinition Height="Auto" />
+                    <RowDefinition Height="Auto" />
                 </Grid.RowDefinitions>
 
                 <Grid.ColumnDefinitions>
@@ -93,6 +94,9 @@
                     Grid.Column="1"
                     VerticalTextAlignment="Center"
                     Text="{Binding Notes}"></Entry>
+
+                <Label Grid.Row="8" Grid.Column="0" Text="Notify" FontSize="Medium"/>
+                <Switch Grid.Row="8" Grid.Column="1" x:Name="Notification" HorizontalOptions="End" IsToggled="True"/>
             </Grid>
         </StackLayout>
     </ContentPage.Content>

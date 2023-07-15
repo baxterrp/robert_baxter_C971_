@@ -1,5 +1,7 @@
 ﻿using robert_baxter_C971_.Models;
 using robert_baxter_C971_.Services;
+using System.Linq;
+using System.Security;
 using Xamarin.Forms;
 using Xamarin.Forms.Xaml;
 
@@ -29,7 +31,9 @@ namespace robert_baxter_C971_.Views
                 return;
             }
 
-            if (string.IsNullOrWhiteSpace(AssessmentTypePicker.SelectedItem?.ToString()))
+            var selectedAssessmentType = AssessmentTypePicker.SelectedItem?.ToString() ?? string.Empty;
+
+            if (string.IsNullOrWhiteSpace(selectedAssessmentType))
             {
                 await DisplayAlert("Error", "Please select assessment type", "Ok");
                 return;
@@ -41,6 +45,14 @@ namespace robert_baxter_C971_.Views
                 return;
             }
 
+            var assessments = (await DatabaseService.GetAssessmentsByCourse(_selectedCourse)).ToList();
+            
+            if (assessments.Any(assessment => selectedAssessmentType.Equals(assessment.Type)))
+            {
+                await DisplayAlert("Error", $"An assessment of type {selectedAssessmentType} has already been added to this course", "Ok");
+                return;
+            }
+
             await DatabaseService.SaveNewAssessment(new Assessment
             {
                 CourseId = _selectedCourse.Id,
@@ -48,6 +60,7 @@ namespace robert_baxter_C971_.Views
                 Type = AssessmentTypePicker.SelectedItem.ToString(),
                 StartDate = StartDatePicker.Date,
                 EndDate = EndDatePicker.Date,
+                Notify = Notification.IsToggled,
             });
 
             await DisplayAlert("Success", "Successfully saved assessment", "Ok");
